@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { db } from '../firebase';
 import { doc, collection, onSnapshot, setDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { useAuth } from './AuthContext';
@@ -36,7 +37,7 @@ export function CartProvider({ children }) {
 
   const addToCart = async (product) => {
     if (!currentUser) {
-      alert("Please log in to add items to your cart.");
+      toast.error("Please log in to add items to your cart.");
       return;
     }
 
@@ -50,6 +51,7 @@ export function CartProvider({ children }) {
       // If item is not in cart, add it with quantity 1
       await setDoc(cartDocRef, { ...product, quantity: 1 });
     }
+    toast.success(`${product.name} added to cart!`);
   };
 
   const removeFromCart = async (productId) => {

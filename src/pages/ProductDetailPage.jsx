@@ -1,87 +1,90 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useCart } from "../context/CartContext";
+import toast from "react-hot-toast";
 
 function ProductDetailPage() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const { addToCart } = useCart();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
+      setError("");
       try {
-        // Create a reference to the specific document
-        const productDocRef = doc(db, "products", productId);
-        const docSnap = await getDoc(productDocRef);
+        const productRef = doc(db, "products", productId);
+        const docSnap = await getDoc(productRef);
 
         if (docSnap.exists()) {
           setProduct({ id: docSnap.id, ...docSnap.data() });
         } else {
-          console.log("No such document!");
-          // You could redirect to a 404 page here
+          setError("Product not found.");
+          toast.error("Product not found!");
+          navigate("/products"); // Redirect to products page if not found
         }
-      } catch (error) {
-        console.error("Error fetching product:", error);
+      } catch (err) {
+        console.error("Error fetching product details: ", err);
+        setError("Failed to load product details.");
+        toast.error("Failed to load product details.");
+        navigate("/products");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchProduct();
-  }, [productId]); // Re-run the effect if the productId changes
+  }, [productId, navigate]);
 
   if (loading) {
-    return <p className="text-center text-xl mt-10">Loading product...</p>;
-  }
-
-  if (!product) {
     return (
-      <div className="text-center mt-10">
-        <h1 className="text-2xl">Product not found.</h1>
-        <Link
-          to="/"
-          className="text-blue-600 hover:underline mt-4 inline-block"
-        >
-          &larr; Back to all products
-        </Link>
-      </div>
+      <p className="text-center text-xl text-gray-600 mt-8">
+        Loading product details...
+      </p>
     );
   }
 
+  if (error) {
+    return <p className="text-center text-xl text-red-500 mt-8">{error}</p>;
+  }
+
+  if (!product) return null; // Should not happen with the redirect above, but as a safeguard
+
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <Link to="/" className="text-blue-600 hover:underline mb-6 inline-block">
-        &larr; Back to all products
-      </Link>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+    <div className="bg-white rounded-xl shadow-lg-light p-8 md:p-12 max-w-4xl mx-auto flex flex-col md:flex-row gap-8 md:gap-12">
+      <div className="md:w-1/2 flex justify-center items-center">
+        <img
+          src={product.imageUrl}
+          alt={product.name}
+          className="w-full max-h-[400px] object-contain rounded-lg shadow-md"
+        />
+      </div>
+      <div className="md:w-1/2 flex flex-col justify-between">
         <div>
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className="w-full rounded-lg shadow-lg"
-          />
-        </div>
-        <div>
-          <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-            {product.category}
-          </span>
-          <h1 className="text-4xl font-bold my-4">{product.name}</h1>
-          <p className="text-3xl text-gray-800 font-semibold mb-6">
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">
+            {product.name}
+          </h1>
+          <p className="text-primary-600 text-2xl font-bold mb-4">
             ${product.price.toFixed(2)}
           </p>
-          <p className="text-gray-600 leading-relaxed mb-8">
+          <div className="bg-primary-50 text-primary-700 text-sm font-semibold px-3 py-1 rounded-full inline-block mb-4">
+            {product.category}
+          </div>
+          <p className="text-gray-700 text-lg leading-relaxed mb-6">
             {product.description}
           </p>
-          <button
-            onClick={() => addToCart(product)}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors text-lg"
-          >
-            Add to Cart
-          </button>
         </div>
+        <button
+          onClick={() => addToCart(product)}
+          className="w-full bg-primary-600 text-white py-3 rounded-lg hover:bg-primary-700 transition-colors text-xl font-semibold shadow-md-light"
+        >
+          Add to Cart
+        </button>
       </div>
     </div>
   );
