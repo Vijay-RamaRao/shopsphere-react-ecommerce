@@ -11,6 +11,7 @@ function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { signup } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -21,7 +22,7 @@ function SignupPage() {
     setError("");
     setLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      await signup(email, password);
       toast.success("Account created! Welcome!");
       navigate("/"); // Navigate to homepage on successful signup
     } catch (err) {
