@@ -78,7 +78,7 @@ function CartSidebar() {
                       {item.name}
                     </h3>
                     <p className="text-primary-600 font-medium">
-                      ${item.price.toFixed(2)}
+                      ₹{item.price.toFixed(2)}
                     </p>
                     <div className="flex items-center mt-2">
                       <button
@@ -117,7 +117,7 @@ function CartSidebar() {
         <div className="p-5 border-t border-gray-100 bg-gray-50">
           <div className="flex justify-between font-bold text-xl text-gray-900 mb-5">
             <span>Subtotal</span>
-            <span>${subtotal.toFixed(2)}</span>
+            <span>₹{subtotal.toFixed(2)}</span>
           </div>
           <Link to="/checkout" className="block w-full">
             <button

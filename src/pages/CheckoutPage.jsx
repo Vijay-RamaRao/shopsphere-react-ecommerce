@@ -137,7 +137,7 @@ function CheckoutPage() {
                   className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400"
                   disabled={isProcessing}
                 >
-                  {isProcessing ? 'Processing...' : `Pay $${subtotal.toFixed(2)}`}
+                  {isProcessing ? 'Processing...' : `Pay ₹${subtotal.toFixed(2)}`}
                 </button>
               </div>
             </form>
@@ -157,14 +157,14 @@ function CheckoutPage() {
                     <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                   </div>
                 </div>
-                <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                <p className="font-semibold">₹{(item.price * item.quantity).toFixed(2)}</p>
               </div>
             ))}
           </div>
           <div className="border-t my-4"></div>
           <div className="flex justify-between font-bold text-xl">
             <span>Total</span>
-            <span>${subtotal.toFixed(2)}</span>
+            <span>₹{subtotal.toFixed(2)}</span>
           </div>
         </div>
       </div>

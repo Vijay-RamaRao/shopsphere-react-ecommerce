@@ -70,7 +70,7 @@ function ProductDetailPage() {
             {product.name}
           </h1>
           <p className="text-primary-600 text-2xl font-bold mb-4">
-            ${product.price.toFixed(2)}
+            ₹{product.price.toFixed(2)}
           </p>
           <div className="bg-primary-50 text-primary-700 text-sm font-semibold px-3 py-1 rounded-full inline-block mb-4">
             {product.category}

@@ -52,7 +52,7 @@ function ProfilePage() {
                     <p className="font-semibold">Order ID: <span className="font-normal text-gray-600">{order.id}</span></p>
                     <p className="font-semibold">Date: <span className="font-normal text-gray-600">{order.createdAt}</span></p>
                   </div>
-                  <p className="font-bold text-lg">${order.subtotal.toFixed(2)}</p>
+                  <p className="font-bold text-lg">₹{order.subtotal.toFixed(2)}</p>
                 </div>
                 <div>
                   <h4 className="font-semibold mb-2">Items:</h4>
