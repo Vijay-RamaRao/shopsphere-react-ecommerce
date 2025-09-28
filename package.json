@@ -2,7 +2,7 @@
   "name": "shopsphere",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://github.com/Vijay-RamaRao/shopsphere-react-ecommerce",
+  "homepage": "https://vijay-ramarao.github.io/shopsphere-react-ecommerce/",
   "type": "module",
   "scripts": {
     "dev": "vite",

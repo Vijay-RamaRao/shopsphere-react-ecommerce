@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { useSearch } from "../context/SearchContext";
@@ -62,11 +62,13 @@ function Header() {
     }
   };
 
+  const location = useLocation();
+
   const handleSearch = (e) => {
     e.preventDefault();
     // Ensure we are on the products page when searching
-    if (window.location.pathname !== "/products") {
-      navigate("/products");
+    if (!location.pathname.endsWith("/products")) {
+      navigate("/products", { replace: true });
     }
   };
 

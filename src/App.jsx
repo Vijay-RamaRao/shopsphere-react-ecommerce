@@ -24,7 +24,7 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <SearchProvider>
-          <Router>
+          <Router basename={import.meta.env.BASE_URL}>
             <Toaster position="bottom-center" />
             <div className="bg-gray-50 min-h-screen font-sans flex flex-col">
               <Header />
